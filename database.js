@@ -14,12 +14,19 @@ dbWrapper
         try{
             if(!exists){
                 await db.run(
+                    `CREATE TABLE user(login,password)VALUES
+                    ('admin', 'admin'),
+                    ('JavaScript', 'banana'),
+                    ('user1', 'password');`
+                )
+                await db.run(
                     `CREATE TABLE user(
                     user_id INTEGER PRIMARY KEY AUTOINCREMENT,
                     login TEXT,
                     password TEXT
                     );`
                 )
+                
             } else{
                 console.log(await db.all("SELECT * from user"))
             }
@@ -27,3 +34,21 @@ dbWrapper
             console.error(dbError)
         }
     })
+module.exports = {
+    getMessages: async () => {
+        try{
+            return await db.all(
+                `SELECT msg_id, content, login, user_id from message
+                 JOIN user ON message.author = user.user_id`
+            )
+        } catch(dbError){
+            console.error(dbError)
+        }
+    },
+    addMessage: async (matchesGlob, userId) => {
+        await db.run(
+            `INSERT INTO message (content, author) VALUES (?, ?)`,
+            [matchesGlob, userId]
+        )
+    }
+}    
