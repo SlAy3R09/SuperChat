@@ -8,7 +8,7 @@ const scriptFile = fs.readFileSync(path.join(__dirname, 'static', 'script.js'));
 const authFile = fs.readFileSync(path.join(__dirname, 'static', 'auth.js'));
 const styleFile = fs.readFileSync(path.join(__dirname, 'static', 'style.css'));
 const registerFile = fs.readFileSync(path.join(__dirname, 'static', 'register.html'));
-
+const loginFile = fs.readFileSync(path.join(__dirname, 'static', 'login.html'));
 const server = http.createServer((req, res) => {
   if(req.method === 'GET') {
     switch(req.url) {
@@ -17,11 +17,13 @@ const server = http.createServer((req, res) => {
       case '/auth.js': return res.end(authFile);
       case '/style.css': return res.end(styleFile);
       case '/register': return res.end(registerFile);
+      case '/login': return res.end(loginFile);
     }
   }
   if(req.method === 'POST') {
     switch(req.url) {
       case '/api/register': return registerUser(req, res);
+      case '/api/login': return login(req, res);
     }
   }
   return res.end('Error 404');
@@ -49,7 +51,15 @@ function registerUser(req, res) {
       }
     });
 }
-
+function login(req, res) {
+    let data = '';
+    req.on('data', function(chunk) {
+        data += chunk;
+    });
+    req.on('end', function() {
+      console.log(data);
+    });
+}
 server.listen(3000);
 
 const { Server } = require("socket.io");

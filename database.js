@@ -1,4 +1,5 @@
 const fs = require("fs");
+const crypto = require("crypto");
 
 // Шлях до файлу, у якому буде наша база даних
 const dbFile = "./chat.db";
@@ -42,7 +43,7 @@ dbWrapper
                 autor INTEGER,
                 FOREIGN KEY(autor) REFERENCES user(user_id)
             );`
-        );s
+        );
       } else {
         console.log(await db.all("SELECT * from user"));
       }
