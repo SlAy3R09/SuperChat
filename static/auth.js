@@ -1,5 +1,6 @@
 const registerForm = document.getElementById('register-form');
 const loginForm = document.getElementById('login-form');
+
 registerForm?.addEventListener('submit', (event) => {
     event.preventDefault();
     const {login, password, passwordRepeat} = registerForm;
@@ -18,7 +19,7 @@ registerForm?.addEventListener('submit', (event) => {
 
 loginForm?.addEventListener('submit', (event) => {
     event.preventDefault();
-    const {login, password,} = loginForm;
+    const {login, password} = loginForm;
     const user = JSON.stringify({
         login: login.value,
         password: password.value
@@ -27,13 +28,13 @@ loginForm?.addEventListener('submit', (event) => {
     xhr.open('POST', '/api/login');
     xhr.send(user);
     xhr.onload = () => {
-        if(xhr.status === 200){
-            const token = xhr.response
-            document.cookie = `token=${token}`
-            window.location.assign('/')
+        if(xhr.status === 200) {
+            const token = xhr.response;
+            document.cookie = `token=${token}`;
+            window.location.assign('/');
         }
-        else{
-            return alert(xhr.response)
+        else {
+            return alert(xhr.response);
         }
-    };
+    }
 });
